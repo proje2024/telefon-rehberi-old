@@ -107,22 +107,30 @@ const UserInfo = ({ user, onSaveSuccess }) => {
     { title: mailbox_label, dataIndex: 'mailbox', key: 'mailbox', align: 'center' },
     { title: visibility_label, dataIndex: 'visibility', key: 'visibility', align: 'center', render: text => text === 1 ? 'Görünür' : 'Gizli' },
     { title: spare_name, dataIndex: 'spare_number', key: 'spare_number', align: 'center' },
-    { title: 'Abonelik Türü', dataIndex: 'subscription_id', key: 'subscription_id', align: 'center', render: id => {
+    { 
+      title: 'Abonelik Türü', 
+      dataIndex: 'subscription_id', 
+      key: 'subscription_id', 
+      align: 'center', 
+      render: id => {
         const selectedSubscription = subscriptions.find(opt => opt.value === id);
         return selectedSubscription ? selectedSubscription.label : ' ';
       }
     },
-    {
-      title: 'İşlemler',
-      key: 'actions',
-      align: 'center',
-      render: (text, record) => (
-        <Button icon={<EditOutlined />} onClick={() => showUpdateModal(record)} type="primary">
-          Güncelle
-        </Button>
-      ),
-    }
+    ...(isRoleAdmin ? [
+      {
+        title: 'İşlemler',
+        key: 'actions',
+        align: 'center',
+        render: (text, record) => (
+          <Button icon={<EditOutlined />} onClick={() => showUpdateModal(record)} type="primary">
+            Güncelle
+          </Button>
+        ),
+      }
+    ] : []),
   ];
+  
 
   const showUpdateModal = (record) => {
     setSelectedUser(record);
