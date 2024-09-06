@@ -50,8 +50,16 @@ const Navigation = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await Axios.post('/api/auth/logout');
+      const token = localStorage.getItem('token');
+      const response = await Axios.post('/api/auth/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
+        localStorage.removeItem("token")
+        localStorage.removeItem("refreshToken")
+        localStorage.removeItem("user")
         setIsLoggedIn(false);
         navigate('/login');
       } else {

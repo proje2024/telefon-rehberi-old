@@ -10,20 +10,16 @@ export const Authenticator = ({ children }) => {
 
     useEffect(() => {
         const checkLoginStatus = async () => {
-            try {
-                const response = await axios.get('/home', { withCredentials: true });
-                if (response.status === 200 && response.data.authenticated) {
-                    setIsLoggedIn(true);
-                } else {
-                    setIsLoggedIn(false);
-                }
-            } catch (error) {
-                if (error.response && error.response.status === 401) {
-                    setIsLoggedIn(false);
-                }
-            } finally {
-                setLoading(false);
+            const token = localStorage.getItem("token");
+
+            if(token) {
+                // Giriş yapıldıysa durumu güncelle
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
             }
+
+            setLoading(false); // Yükleme durumu kapat
         };
 
         checkLoginStatus();
