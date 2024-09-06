@@ -1,0 +1,182 @@
+/* Container Styling */
+.user-info {
+  background-color: #395B64;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  margin: auto;
+  margin-top: 3%;
+  position: relative; /* Allows positioning of child elements */
+}
+
+/* Edit Button */
+.user-info .edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #A5C9CA;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.user-info .edit-button:hover {
+  background-color: #E7F6F2;
+  color: #000;
+}
+
+/* Headings */
+.user-info h3 {
+  margin-top: 0;
+  color: white;
+  text-align: center;
+  font-size: 24px;
+}
+
+/* Information Items */
+.user-info .info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info .info-item p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: white;
+}
+
+.user-info .info-item p strong {
+  flex-basis: 150px;
+}
+
+.user-info .info-item span {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+/* Form and Input Fields */
+.ant-form-item {
+  margin-bottom: 15px;
+}
+
+.ant-form-item-label > label {
+  color: white;
+  font-size: 16px;
+}
+
+.ant-input,
+.ant-select-selector {
+  background-color: white;
+  color: black;
+  border-radius: 15px;
+}
+
+.ant-input:focus,
+.ant-select-selector:focus {
+  border-color: white;
+  outline: none;
+}
+
+.ant-checkbox-wrapper {
+  font-size: 16px;
+  color: white;
+}
+
+.ant-checkbox-wrapper-checked .ant-checkbox-inner,
+.ant-checkbox-wrapper-checked .ant-checkbox-inner:focus {
+  background-color: #A5C9CA;
+  border-color: #A5C9CA;
+}
+
+/* Placeholder Text Styling */
+::placeholder,
+.ant-input::placeholder,
+.ant-select-selector::placeholder {
+  color: black;
+  opacity: 1;
+}
+
+/* Error Messages */
+.ant-form-item-explain-error {
+  color: white !important;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Input Hover Effects */
+.ant-form-item-control-input input:hover,
+.ant-select-selector:hover {
+  background-color: #C2E0E1 !important;
+}
+
+/* Dropdown Styling */
+.ant-select-dropdown {
+  color: black;
+}
+
+.ant-select-item-option-active,
+.ant-select-item-option-selected {
+  color: black;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  background-color: #2f4b52 !important; /* Same background color for both thead and tbody */
+  color: white !important;
+  border-color: #3e686e;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background-color: #A5C9CA !important;
+  color: black;
+}
+
+/* Pagination Styling */
+.ant-table-pagination {
+  background-color: #395B64;
+  color: white;
+}
+
+/* Dark Modal Styling */
+.dark-modal .ant-modal-content {
+  background-color: #1c1c1c;
+  color: #fff;
+}
+
+.dark-modal .ant-modal-header,
+.dark-modal .ant-modal-footer {
+  background-color: #1c1c1c;
+}
+
+.dark-modal .ant-modal-title {
+  color: #fff;
+}
+
+.dark-modal .ant-btn-primary {
+  background-color: #4a4a4a;
+  border-color: #4a4a4a;
+}
+
+.dark-modal .ant-btn {
+  color: #fff;
+}
+
+/* Cancel Button */
+.cancel-button {
+  background-color: #ff4d4f;
+  border: none;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #ff7875;
+  color: white;
+}
+
+.ant-form-item .ant-form-item-label > label{
+  color: white;
+}
