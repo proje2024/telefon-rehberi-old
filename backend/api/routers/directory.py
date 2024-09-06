@@ -1,15 +1,14 @@
 from sqlalchemy import Column, null, or_, and_
 from fastapi import FastAPI, status, HTTPException, Depends, APIRouter, File, UploadFile
 from sqlalchemy.orm import Session, joinedload
-from api.deps import get_db
-from api.db.models import Directory,Hierarchy, SubscriptionTypes
+from api.deps import get_db, get_current_user
+from api.db.models import Directory,Hierarchy, SubscriptionTypes, User
 from api.schemas import DirectoryEditV, SubscriptionEditV, SubscriptionCreateV
 from typing import List, Dict, Any
 import os
 import shutil
 from fastapi.responses import FileResponse
 from datetime import datetime
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -114,53 +113,100 @@ async def edit_node(
 @router.get("/getNode/{id}", summary="Get Node")
 async def get_node(
     id: int, 
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     result = []
 
     directory = db.query(Directory).filter(Directory.id == id).first()
 
-    if directory:
-        hierarchy = db.query(Hierarchy).filter(Hierarchy.id == directory.hiyerid).first()
-        if hierarchy:
-            subscription = db.query(SubscriptionTypes).filter(SubscriptionTypes.id == hierarchy.subscription_id).first()
-            if subscription:
-                result.append({
-                    "id": directory.id,
-                    "hiyerid": directory.hiyerid,
-                    "ataid": directory.ataid,
-                    "adi": hierarchy.adi,
-                    "internal_number": hierarchy.internal_number,
-                    "ip_number": hierarchy.ip_number,
-                    "hiyerad": hierarchy.hiyerAd,
-                    "mailbox": hierarchy.mailbox,
-                    "visibility": hierarchy.visibility,
-                    "spare_number": hierarchy.spare_number,
-                    "subscription_id": hierarchy.subscription_id,
-                    "subscription": subscription.subscription_types
-                })
-        
-        sub_directory = db.query(Directory).filter(Directory.ataid == directory.id).all()
-        if sub_directory:
-            for nodes in sub_directory:
-                sub_hierarcy = db.query(Hierarchy).filter(Hierarchy.id == nodes.hiyerid).first()
-                if sub_hierarcy:
-                    sub_subscription = db.query(SubscriptionTypes).filter(SubscriptionTypes.id == sub_hierarcy.subscription_id).first()
-                    if sub_subscription:
-                        result.append({
-                            "id": nodes.id,
-                            "hiyerid": nodes.hiyerid,
-                            "ataid": nodes.ataid,
-                            "adi": sub_hierarcy.adi,
-                            "internal_number": sub_hierarcy.internal_number,
-                            "ip_number": sub_hierarcy.ip_number,
-                            "hiyerad": sub_hierarcy.hiyerAd,
-                            "mailbox": sub_hierarcy.mailbox,
-                            "visibility": sub_hierarcy.visibility,
-                            "spare_number": sub_hierarcy.spare_number,
-                            "subscription_id": sub_hierarcy.subscription_id,
-                            "subscription": sub_subscription.subscription_types
-                        })
+    print(user.role)
+
+    if user.role  == 1:
+        if directory:
+            hierarchy = db.query(Hierarchy).filter(Hierarchy.id == directory.hiyerid).first()
+            if hierarchy:
+                subscription = db.query(SubscriptionTypes).filter(SubscriptionTypes.id == hierarchy.subscription_id).first()
+                if subscription:
+                    result.append({
+                        "id": directory.id,
+                        "hiyerid": directory.hiyerid,
+                        "ataid": directory.ataid,
+                        "adi": hierarchy.adi,
+                        "internal_number": hierarchy.internal_number,
+                        "ip_number": hierarchy.ip_number,
+                        "hiyerad": hierarchy.hiyerAd,
+                        "mailbox": hierarchy.mailbox,
+                        "visibility": hierarchy.visibility,
+                        "spare_number": hierarchy.spare_number,
+                        "subscription_id": hierarchy.subscription_id,
+                        "subscription": subscription.subscription_types
+                    })
+
+            sub_directory = db.query(Directory).filter(Directory.ataid == directory.id).all()
+            if sub_directory:
+                for nodes in sub_directory:
+                    sub_hierarcy = db.query(Hierarchy).filter(Hierarchy.id == nodes.hiyerid).first()
+                    if sub_hierarcy:
+                        sub_subscription = db.query(SubscriptionTypes).filter(SubscriptionTypes.id == sub_hierarcy.subscription_id).first()
+                        if sub_subscription:
+                            result.append({
+                                "id": nodes.id,
+                                "hiyerid": nodes.hiyerid,
+                                "ataid": nodes.ataid,
+                                "adi": sub_hierarcy.adi,
+                                "internal_number": sub_hierarcy.internal_number,
+                                "ip_number": sub_hierarcy.ip_number,
+                                "hiyerad": sub_hierarcy.hiyerAd,
+                                "mailbox": sub_hierarcy.mailbox,
+                                "visibility": sub_hierarcy.visibility,
+                                "spare_number": sub_hierarcy.spare_number,
+                                "subscription_id": sub_hierarcy.subscription_id,
+                                "subscription": sub_subscription.subscription_types
+                            })
+    else:
+        if directory:
+            hierarchy = db.query(Hierarchy).filter(Hierarchy.id == directory.hiyerid , Hierarchy.visibility == 1).first()
+            if hierarchy:
+                subscription = db.query(SubscriptionTypes).filter(SubscriptionTypes.id == hierarchy.subscription_id).first()
+                if subscription:
+                    result.append({
+                        "id": directory.id,
+                        "hiyerid": directory.hiyerid,
+                        "ataid": directory.ataid,
+                        "adi": hierarchy.adi,
+                        "internal_number": hierarchy.internal_number,
+                        "ip_number": hierarchy.ip_number,
+                        "hiyerad": hierarchy.hiyerAd,
+                        "mailbox": hierarchy.mailbox,
+                        "visibility": hierarchy.visibility,
+                        "spare_number": hierarchy.spare_number,
+                        "subscription_id": hierarchy.subscription_id,
+                        "subscription": subscription.subscription_types
+                    })
+
+            sub_directory = db.query(Directory).filter(Directory.ataid == directory.id).all()
+            if sub_directory:
+                for nodes in sub_directory:
+                    sub_hierarcy = db.query(Hierarchy).filter(Hierarchy.id == nodes.hiyerid , Hierarchy.visibility == 1).first()
+                    if sub_hierarcy:
+                        sub_subscription = db.query(SubscriptionTypes).filter(SubscriptionTypes.id == sub_hierarcy.subscription_id).first()
+                        if sub_subscription:
+                            result.append({
+                                "id": nodes.id,
+                                "hiyerid": nodes.hiyerid,
+                                "ataid": nodes.ataid,
+                                "adi": sub_hierarcy.adi,
+                                "internal_number": sub_hierarcy.internal_number,
+                                "ip_number": sub_hierarcy.ip_number,
+                                "hiyerad": sub_hierarcy.hiyerAd,
+                                "mailbox": sub_hierarcy.mailbox,
+                                "visibility": sub_hierarcy.visibility,
+                                "spare_number": sub_hierarcy.spare_number,
+                                "subscription_id": sub_hierarcy.subscription_id,
+                                "subscription": sub_subscription.subscription_types
+                            })
+
 
     return result
 

@@ -40,7 +40,13 @@ function Home() {
     const fetchUserInfo = async (nodeId) => {
         if (nodeId) {
             try {
-                const response = await axios.get(`/api/directory/getNode/${nodeId}`);
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`/api/directory/getNode/${nodeId}`, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  });
+                  
                 setUserInfo(response.data);
             } catch (error) {
                 console.error("Error fetching user info:", error);
