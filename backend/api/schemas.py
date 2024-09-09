@@ -15,7 +15,9 @@ class UserCreateV(BaseModel):
 class DirectoryEditV(BaseModel):
     id: Optional[str]
     adi: Optional[str]
+    internal_number_area_code: Optional[str]
     internal_number: Optional[str]
+    ip_number_area_code: Optional[str]
     ip_number: Optional[str]
     mailbox: Optional[str]
     visibility: Optional[int]

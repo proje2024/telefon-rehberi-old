@@ -31,7 +31,9 @@ const UserInfo = ({ user, onSaveSuccess }) => {
         id: selectedUser.id,
         adi: selectedUser.adi,
         hiyerad: selectedUser.hiyerad,
+        internal_number_area_code: selectedUser.internal_number_area_code,
         internal_number: selectedUser.internal_number,
+        ip_number_area_code: selectedUser.ip_number_area_code,
         ip_number: selectedUser.ip_number,
         mailbox: selectedUser.mailbox,
         visibility: selectedUser.visibility === 1,
@@ -48,7 +50,9 @@ const UserInfo = ({ user, onSaveSuccess }) => {
     const userToUpdate = {
       id: String(values.id),
       adi: values.adi,
+      internal_number_area_code: values.internal_number_area_code,
       internal_number: values.internal_number,
+      ip_number_area_code: values.ip_number_area_code,
       ip_number: values.ip_number,
       mailbox: values.mailbox,
       visibility: values.visibility ? 1 : 0,
@@ -91,7 +95,9 @@ const UserInfo = ({ user, onSaveSuccess }) => {
     id: user.id,
     adi: user.adi || ' ',
     hiyerad: user.hiyerad || ' ',
+    internal_number_area_code: user.internal_number_area_code || ' ',
     internal_number: user.internal_number || ' ',
+    ip_number_area_code: user.ip_number_area_code || ' ',
     ip_number: user.ip_number || ' ',
     mailbox: user.mailbox || ' ',
     visibility: user.visibility,
@@ -102,7 +108,9 @@ const UserInfo = ({ user, onSaveSuccess }) => {
   const columns = [
     { title: 'Hiyerarşi', dataIndex: 'hiyerad', key: 'hiyerad', align: 'center' },
     { title: name_label, dataIndex: 'adi', key: 'adi', align: 'center' },
+    { title: internal_number_label + " Alan Kodu", dataIndex: 'internal_number_area_code', key: 'internal_number_area_code', align: 'center' },
     { title: internal_number_label, dataIndex: 'internal_number', key: 'internal_number', align: 'center' },
+    { title: ip_number_label + " Alan Kodu", dataIndex: 'ip_number_area_code', key: 'ip_number_area_code', align: 'center' },
     { title: ip_number_label, dataIndex: 'ip_number', key: 'ip_number', align: 'center' },
     { title: mailbox_label, dataIndex: 'mailbox', key: 'mailbox', align: 'center' },
     { title: visibility_label, dataIndex: 'visibility', key: 'visibility', align: 'center', render: text => text === 1 ? 'Görünür' : 'Gizli' },
@@ -167,7 +175,13 @@ const UserInfo = ({ user, onSaveSuccess }) => {
           <Form.Item name="adi" label={name_label}>
             <Input />
           </Form.Item>
+          <Form.Item name="internal_number_area_code" label={internal_number_label + " Alan Kodu"}>
+            <Input />
+          </Form.Item>
           <Form.Item name="internal_number" label={internal_number_label}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="ip_number_area_code" label={ip_number_label + " Alan Kodu"}>
             <Input />
           </Form.Item>
           <Form.Item name="ip_number" label={ip_number_label}>

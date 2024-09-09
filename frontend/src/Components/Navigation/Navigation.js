@@ -202,8 +202,8 @@ const Navigation = () => {
     <>
       {isLoggedIn && (
         <>
-          {renderTooltipIconButton("Veritabanını Yedekle", handleBackup, <CloudDownloadIcon />)}
-          {renderTooltipIconButton("Veritabanını Geri Yükle", handleRestoreDialogOpen, <BackupIcon />)}
+          {isRoleAdmin && renderTooltipIconButton("Veritabanını Yedekle", handleBackup, <CloudDownloadIcon />)}
+          {isRoleAdmin && renderTooltipIconButton("Veritabanını Geri Yükle", handleRestoreDialogOpen, <BackupIcon />)}
           {isRoleAdmin && renderTooltipIconButton("Abonelik Yönetimi", handleSubscriptionDialogOpen, <ManageAccountsIcon />)}
           {renderTooltipIconButton("Çıkış Yap", handleLogout, <ExitToAppIcon />)}
           <Dialog

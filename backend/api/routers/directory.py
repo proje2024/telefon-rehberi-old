@@ -85,8 +85,12 @@ async def edit_node(
     # Update fields only if provided
     if node_data.adi is not None and db_node.adi != node_data.adi:
         db_node.adi = node_data.adi
+    if node_data.internal_number_area_code is not None and db_node.internal_number_area_code != node_data.internal_number_area_code:
+        db_node.internal_number_area_code = node_data.internal_number_area_code
     if node_data.internal_number is not None and db_node.internal_number != node_data.internal_number:
         db_node.internal_number = node_data.internal_number
+    if node_data.ip_number_area_code is not None and db_node.ip_number_area_code != node_data.ip_number_area_code:
+        db_node.ip_number_area_code = node_data.ip_number_area_code
     if node_data.ip_number is not None and db_node.ip_number != node_data.ip_number:
         db_node.ip_number = node_data.ip_number
     if node_data.mailbox is not None and db_node.mailbox != node_data.mailbox:
@@ -102,7 +106,9 @@ async def edit_node(
     
     return {
         "adi": db_node.adi,
+        "internal_number_area_code": db_node.internal_number_area_code,
         "internal_number": db_node.internal_number,
+        "ip_number_area_code": db_node.ip_number_area_code,
         "ip_number": db_node.ip_number,
         "mailbox": db_node.mailbox,
         "visibility": db_node.visibility,
@@ -133,7 +139,9 @@ async def get_node(
                         "hiyerid": directory.hiyerid,
                         "ataid": directory.ataid,
                         "adi": hierarchy.adi,
+                        "internal_number_area_code": hierarchy.internal_number_area_code,
                         "internal_number": hierarchy.internal_number,
+                        "ip_number_area_code": hierarchy.ip_number_area_code,
                         "ip_number": hierarchy.ip_number,
                         "hiyerad": hierarchy.hiyerAd,
                         "mailbox": hierarchy.mailbox,
@@ -155,7 +163,9 @@ async def get_node(
                                 "hiyerid": nodes.hiyerid,
                                 "ataid": nodes.ataid,
                                 "adi": sub_hierarcy.adi,
+                                "internal_number_area_code": sub_hierarcy.internal_number_area_code,
                                 "internal_number": sub_hierarcy.internal_number,
+                                "ip_number_area_code": sub_hierarcy.ip_number_area_code,
                                 "ip_number": sub_hierarcy.ip_number,
                                 "hiyerad": sub_hierarcy.hiyerAd,
                                 "mailbox": sub_hierarcy.mailbox,
@@ -175,7 +185,9 @@ async def get_node(
                         "hiyerid": directory.hiyerid,
                         "ataid": directory.ataid,
                         "adi": hierarchy.adi,
+                        "internal_number_area_code": hierarchy.internal_number_area_code,
                         "internal_number": hierarchy.internal_number,
+                        "ip_number_area_code": hierarchy.ip_number_area_code,
                         "ip_number": hierarchy.ip_number,
                         "hiyerad": hierarchy.hiyerAd,
                         "mailbox": hierarchy.mailbox,
@@ -197,7 +209,9 @@ async def get_node(
                                 "hiyerid": nodes.hiyerid,
                                 "ataid": nodes.ataid,
                                 "adi": sub_hierarcy.adi,
+                                "internal_number_area_code": sub_hierarcy.internal_number_area_code,
                                 "internal_number": sub_hierarcy.internal_number,
+                                "ip_number_area_code": sub_hierarcy.ip_number_area_code,
                                 "ip_number": sub_hierarcy.ip_number,
                                 "hiyerad": sub_hierarcy.hiyerAd,
                                 "mailbox": sub_hierarcy.mailbox,
