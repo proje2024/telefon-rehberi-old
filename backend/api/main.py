@@ -11,7 +11,7 @@ import os
 load_dotenv()
 
 # PORT değerini .env dosyasından al
-port = int(os.getenv("BACKEND_HOST"))
+port = int(os.getenv("API_PORT"))
 
 app = FastAPI()
 

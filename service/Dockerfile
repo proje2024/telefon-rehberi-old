@@ -5,13 +5,13 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Gerekli dosyaları kopyala
-COPY requirements.txt .
+COPY service/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY service/ /app/
 
 # Wait script'i kopyala ve çalıştırma izinleri ver
-COPY wait.sh /wait.sh
+COPY service/wait.sh /wait.sh
 RUN chmod +x /wait.sh
 
 # Uygulamanızı başlatmadan önce wait.sh'i kullan
