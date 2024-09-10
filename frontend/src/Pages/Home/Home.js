@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from '@mui/material/Container';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import './Home.css';
 import PhoneTree from '../../Components/PhoneTree/PhoneTree';
 import UserInfo from '../../Components/UserInfo/UserInfo';
@@ -14,6 +16,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
+    const [tabValue, setTabValue] = useState(0);
 
     const { subscriptions, loading: subscriptionLoading, error: subscriptionError, addSubscription, editSubscription, deleteSubscription } = useSubscription();
 
@@ -76,6 +79,10 @@ function Home() {
         }
     };
 
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
+
     return (
         <Container className="home-main-container">
             <div className="phone-tree-container">
@@ -100,15 +107,46 @@ function Home() {
                     />
                 )}
             </div>
+
+            {/* Tab yapısı ekleniyor */}
             <div className="user-info-container">
-                <UserInfo 
-                    user={userInfo} 
-                    onSaveSuccess={handleSaveSuccess} 
-                    addSubscription={addSubscription}
-                    editSubscription={editSubscription}
-                    deleteSubscription={deleteSubscription}
-                />
+                {isRoleAdmin ? (
+                    <UserInfo 
+                        user={userInfo} 
+                        onSaveSuccess={handleSaveSuccess} 
+                        addSubscription={addSubscription}
+                        editSubscription={editSubscription}
+                        deleteSubscription={deleteSubscription}
+                    />
+                ) : (
+                    <>
+                        <div className="user-info-tabs">
+                            <Tabs 
+                                value={tabValue} 
+                                onChange={handleTabChange} 
+                                aria-label="User Information Tabs"
+                            >
+                                <Tab label="Sabit Numara" />
+                                <Tab label="Ip Numara" />
+                                <Tab label="Posta Kutusu" />
+                            </Tabs>
+                        </div>
+                        
+                        <div className="user-info-content">
+                            {/* TabValue'yi UserInfo'ya prop olarak gönderiyoruz */}
+                            <UserInfo 
+                                user={userInfo} 
+                                onSaveSuccess={handleSaveSuccess} 
+                                addSubscription={addSubscription}
+                                editSubscription={editSubscription}
+                                deleteSubscription={deleteSubscription}
+                                tabValue={tabValue}  // Hangi tab'tan geldiğini gösteren parametre
+                            />
+                        </div>
+                    </>
+                )}
             </div>
+
         </Container>
     );
 }

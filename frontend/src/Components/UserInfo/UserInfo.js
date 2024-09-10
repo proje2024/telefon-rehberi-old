@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, Checkbox, message, Table, Modal } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import Axios from '../../Axios'; // Ensure Axios is correctly imported
-import './UserInfo.css'; // Ensure your CSS file is correctly imported
+import Axios from '../../Axios'; 
+import './UserInfo.css'; 
 import { useSubscription } from '../../Context/SubscriptionContext';
 
 const { Option } = Select;
@@ -12,25 +12,24 @@ const name_label = process.env.REACT_APP_NAME_LABEL;
 const internal_number_label = process.env.REACT_APP_INTERNAL_NUMBER_LABEL;
 const ip_number_label = process.env.REACT_APP_IP_NUMBER_LABEL;
 const mailbox_label = process.env.REACT_APP_MAILBOX_LABEL;
-const visibility_label = process.env.REACT_APP_VISIBILITY_LABEL;
 
-const UserInfo = ({ user, onSaveSuccess }) => {
+const UserInfo = ({ user, onSaveSuccess, tabValue }) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const { subscriptions } = useSubscription();
   const userRole = JSON.parse(localStorage.getItem("user"))?.role;
   const isRoleAdmin = userRole === 1;
 
+  const transformedData = user ? [user] : [];
+
   useEffect(() => {
     if (selectedUser) {
       form.setFieldsValue({
         id: selectedUser.id,
         adi: selectedUser.adi,
-        hiyerad: selectedUser.hiyerad,
         internal_number_area_code: selectedUser.internal_number_area_code,
         internal_number: selectedUser.internal_number,
         ip_number_area_code: selectedUser.ip_number_area_code,
@@ -45,7 +44,6 @@ const UserInfo = ({ user, onSaveSuccess }) => {
 
   const handleSave = async (values) => {
     setIsLoading(true);
-    setError(null);
 
     const userToUpdate = {
       id: String(values.id),
@@ -90,55 +88,62 @@ const UserInfo = ({ user, onSaveSuccess }) => {
     return <div className="user-info">Kullanıcı verisi bulunamadı.</div>;
   }
 
-  const dataSource = user.map(user => ({
-    key: user.id, 
-    id: user.id,
-    adi: user.adi || ' ',
-    hiyerad: user.hiyerad || ' ',
-    internal_number_area_code: user.internal_number_area_code || ' ',
-    internal_number: user.internal_number || ' ',
-    ip_number_area_code: user.ip_number_area_code || ' ',
-    ip_number: user.ip_number || ' ',
-    mailbox: user.mailbox || ' ',
-    visibility: user.visibility,
-    spare_number: user.spare_number || ' ',
-    subscription_id: user.subscription_id,
-  }));
-
-  const columns = [
-    { title: 'Hiyerarşi', dataIndex: 'hiyerad', key: 'hiyerad', align: 'center' },
-    { title: name_label, dataIndex: 'adi', key: 'adi', align: 'center' },
-    { title: internal_number_label + " Alan Kodu", dataIndex: 'internal_number_area_code', key: 'internal_number_area_code', align: 'center' },
-    { title: internal_number_label, dataIndex: 'internal_number', key: 'internal_number', align: 'center' },
-    { title: ip_number_label + " Alan Kodu", dataIndex: 'ip_number_area_code', key: 'ip_number_area_code', align: 'center' },
-    { title: ip_number_label, dataIndex: 'ip_number', key: 'ip_number', align: 'center' },
-    { title: mailbox_label, dataIndex: 'mailbox', key: 'mailbox', align: 'center' },
-    { title: visibility_label, dataIndex: 'visibility', key: 'visibility', align: 'center', render: text => text === 1 ? 'Görünür' : 'Gizli' },
-    { title: spare_name, dataIndex: 'spare_number', key: 'spare_number', align: 'center' },
-    { 
-      title: 'Abonelik Türü', 
-      dataIndex: 'subscription_id', 
-      key: 'subscription_id', 
-      align: 'center', 
-      render: id => {
-        const selectedSubscription = subscriptions.find(opt => opt.value === id);
-        return selectedSubscription ? selectedSubscription.label : ' ';
+  // Dinamik kolonlar için fonksiyon
+  const getColumns = () => {
+    if (!isRoleAdmin) {
+      // Admin değilse, sadece adi ve ilgili kolonları göster
+      if (tabValue === 0) { // Sabit Numara
+        return [
+          { title: name_label, dataIndex: 'adi', key: 'adi', align: 'center' },
+          { title: 'Santral Hattı' + " Alan Kodu", dataIndex: 'internal_number_area_code', key: 'internal_number_area_code', align: 'center' },
+          { title: 'Santral Hattı', dataIndex: 'internal_number', key: 'internal_number', align: 'center' },
+        ];
+      } else if (tabValue === 1) { // IP Numara
+        return [
+          { title: name_label, dataIndex: 'adi', key: 'adi', align: 'center' },
+          { title: ip_number_label, dataIndex: 'ip_number', key: 'ip_number', align: 'center' },
+          { title: ip_number_label, dataIndex: 'ip_number', key: 'ip_number', align: 'center' },
+        ];
+      } else if (tabValue === 2) { // Posta Kutusu
+        return [
+          { title: name_label, dataIndex: 'adi', key: 'adi', align: 'center' },
+          { title: mailbox_label, dataIndex: 'mailbox', key: 'mailbox', align: 'center' },
+        ];
       }
-    },
-    ...(isRoleAdmin ? [
-      {
-        title: 'İşlemler',
-        key: 'actions',
-        align: 'center',
-        render: (text, record) => (
-          <Button icon={<EditOutlined />} onClick={() => showUpdateModal(record)} type="primary">
-            Güncelle
-          </Button>
-        ),
-      }
-    ] : []),
-  ];
-  
+    } else {
+      // Eğer admin ise tüm kolonlar gösterilecek
+      return [
+        { title: 'Hiyerarşi', dataIndex: 'hiyerad', key: 'hiyerad', align: 'center' },
+        { title: name_label, dataIndex: 'adi', key: 'adi', align: 'center' },
+        { title: internal_number_label + " Alan Kodu", dataIndex: 'internal_number_area_code', key: 'internal_number_area_code', align: 'center' },
+        { title: internal_number_label, dataIndex: 'internal_number', key: 'internal_number', align: 'center' },
+        { title: ip_number_label + " Alan Kodu", dataIndex: 'ip_number_area_code', key: 'ip_number_area_code', align: 'center' },
+        { title: ip_number_label, dataIndex: 'ip_number', key: 'ip_number', align: 'center' },
+        { title: mailbox_label, dataIndex: 'mailbox', key: 'mailbox', align: 'center' },
+        { title: spare_name, dataIndex: 'spare_number', key: 'spare_number', align: 'center' },
+        {
+          title: 'Abonelik Türü',
+          dataIndex: 'subscription_id',
+          key: 'subscription_id',
+          align: 'center',
+          render: id => {
+            const selectedSubscription = subscriptions.find(opt => opt.value === id);
+            return selectedSubscription ? selectedSubscription.label : ' ';
+          }
+        },
+        {
+          title: 'İşlemler',
+          key: 'actions',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon={<EditOutlined />} onClick={() => showUpdateModal(record)} type="primary">
+              Güncelle
+            </Button>
+          ),
+        }
+      ];
+    }
+  };
 
   const showUpdateModal = (record) => {
     setSelectedUser(record);
@@ -149,14 +154,13 @@ const UserInfo = ({ user, onSaveSuccess }) => {
   return (
     <div className="user-info">
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={transformedData}
+        columns={getColumns()} // Dinamik kolonlar burada belirleniyor
+        rowKey="id"
         pagination={false}
         bordered
-        className="user-info-table"
-        rowKey="key" 
+        className="my-custom-table"
       />
-
       <Modal
         title="Kullanıcı Güncelle"
         visible={isModalVisible}
@@ -191,21 +195,6 @@ const UserInfo = ({ user, onSaveSuccess }) => {
             { type: 'email', message: 'Geçersiz Email!' },
           ]}>
             <Input />
-          </Form.Item>
-          <Form.Item name="visibility" valuePropName="checked">
-            <Checkbox>{visibility_label}</Checkbox>
-          </Form.Item>
-          <Form.Item name="spare_number" label={spare_name}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="subscription_id" label="Abonelik Türü">
-            <Select>
-              {subscriptions.map(sub => (
-                <Option key={sub.value} value={sub.value}>
-                  {sub.label}
-                </Option>
-              ))}
-            </Select>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={isLoading} className="submit-button">

@@ -48,3 +48,8 @@
 .custom-textfield .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: white; /* Set the border color when focused */
 }
+
+.user-info-tabs {
+  display: flex;
+  justify-content: center; /* Bu, tab'ları yatayda ortalar */
+}
